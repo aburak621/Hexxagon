@@ -1,0 +1,106 @@
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <iostream>
+
+const float HEX_SIZE = 48.f; // Size of each hexagon
+const float HEX_HEIGHT = HEX_SIZE * 2.f;
+const float HEX_WIDTH = sqrt(3.f) / 3.f * HEX_HEIGHT;
+
+void drawHexagon(sf::RenderWindow& window, float x, float y, sf::Color fillColor, sf::Color outlineColor) {
+    sf::ConvexShape hexagon;
+    hexagon.setPointCount(6);
+    hexagon.setPoint(0, sf::Vector2f(HEX_WIDTH / 2.f, 0.f));
+    hexagon.setPoint(1, sf::Vector2f(HEX_WIDTH, HEX_HEIGHT / 4.f));
+    hexagon.setPoint(2, sf::Vector2f(HEX_WIDTH, HEX_HEIGHT * 3.f / 4.f));
+    hexagon.setPoint(3, sf::Vector2f(HEX_WIDTH / 2.f, HEX_HEIGHT));
+    hexagon.setPoint(4, sf::Vector2f(0.f, HEX_HEIGHT * 3.f / 4.f));
+    hexagon.setPoint(5, sf::Vector2f(0.f, HEX_HEIGHT / 4.f));
+
+    hexagon.setFillColor(fillColor);
+    hexagon.setOutlineThickness(1.f);
+    hexagon.setOutlineColor(outlineColor);
+
+    hexagon.setPosition(sf::Vector2f(x, y)); // Set the position of the hexagon
+
+    window.draw(hexagon);
+}
+
+    sf::CircleShape Player(30, 5);
+    float offsetX = 0.03, offsetY =0;
+    sf::Vector2i PlayerPosition(4, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hexagon Game",  sf::Style::Close);
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+
+        // Define the position of the hexagon grid
+        sf::Vector2f gridPosition(420.f, 32.f);
+
+        // Drawing the hexagon grid
+        for (int row = 0; row < 9; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                if(
+                         col == 0 && (row == 0 || row == 2 || row == 6 || row == 8 || row == 1 || row == 9 || row == 7 ) ||
+                        (col == 1 && (row == 0 || row == 8)) ||
+                        (col == 7 && (row == 0 || row == 8 || row == 1 || row == 7)) ||
+                        (col == 8 && (row == 2 || row == 6 || row == 3 || row == 5 || row == 0 || row == 1 || row == 8 || row == 7))
+                              ||  (row == 4 && col == 3) || (row == 5 && col == 4) || (row == 3 && col == 4)
+                        )
+                    continue;
+
+               /* if (event.type == sf::Event::LostFocus)
+                    myGame.pause();
+
+                if (event.type == sf::Event::GainedFocus)
+                    myGame.resume(); */
+                // get the local mouse position (relative to a window)
+              //  sf::Vector2i localPosition = sf::Mouse::getPosition(window); // window is a sf::Window
+
+                float x = gridPosition.x + col * HEX_WIDTH + ((row % 2 == 1) ? HEX_WIDTH / 2.f : 0.f);
+                float y = gridPosition.y + row * (HEX_HEIGHT * 0.75f);
+                sf::Color fillColor = sf::Color::Blue;
+                sf::Color outlineColor = sf::Color::White;
+                drawHexagon(window, x, y, fillColor, outlineColor);
+                
+                /* Marking certain cells as occupied
+                if ((row == 4 && col == 3) || (row == 5 && col == 4) || (row == 3 && col == 4)) {
+                    fillColor = sf::Color::Black;
+                } */
+
+                // Check if the current cell is the player's position
+                if (sf::Vector2i(row, col) == PlayerPosition) {
+                    sf::CircleShape player(HEX_SIZE / 2.f);
+                    player.setFillColor(sf::Color::Green);
+                    player.setOutlineThickness(1.f);
+                    player.setOutlineColor(sf::Color::Black);
+                    sf::Vector2f playerPosition(x + (HEX_WIDTH / 2.f) - (HEX_SIZE / 2.f), y + (HEX_HEIGHT / 2.f) - (HEX_SIZE / 2.f));
+                    player.setPosition(playerPosition);
+                    window.draw(player);
+                }
+            }
+        }
+
+        window.display();
+    }
+
+    return 0;
+}
