@@ -7,6 +7,7 @@ Board::Board(sf::RenderWindow &window) : window(window) {
 void Board::initializeHexagonGrid() {
     playerOneScore = 3;
     playerTwoScore = 3;
+    cells.clear();
     std::vector<int> extraCells = {0, 1, 2, 3, 4, 4, 4, 4, 4};
     for (int row = 0; row < 9; ++row) {
         int colNumber = 5 + extraCells[row];
@@ -38,6 +39,9 @@ bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int
     // Check if move is valid
     for (auto &legalMove: legalMoves) {
         sf::Vector2i currentIndex(pieceIndex.x + legalMove.x, pieceIndex.y + legalMove.y);
+
+        if (!(currentIndex.x >= 0 && currentIndex.x < cells.size()) ||
+            !(currentIndex.y >= 0 && currentIndex.y < cells[currentIndex.x].size())) { continue; }
         if (placementIndex == currentIndex && cells[currentIndex.x][currentIndex.y].type == HexType::empty) {
             cells[currentIndex.x][currentIndex.y].type = playerNo;
 
@@ -139,4 +143,5 @@ bool Board::isTherePossibleMove(int playerNo) {
 void Board::printGameOverMessage() {
     bool playerOneWon = playerOneScore > playerTwoScore;
     std::cout << "Player " << (playerOneWon ? "1" : "2") << " won the game!" << std::endl;
+    std::cout << "Press 'R' to restart the game." << std::endl;
 }

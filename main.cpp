@@ -18,6 +18,22 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            
+            if (event.type == sf::Event::KeyPressed)
+            {
+                switch (event.key.code)
+                {
+                    case sf::Keyboard::R:
+                        hexagonBoard.initializeHexagonGrid();
+                        playersTurn = 1;
+                        break;
+                    case sf::Keyboard::Escape:
+                        window.close();
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
@@ -39,7 +55,6 @@ int main() {
                         playersTurn = (playersTurn % 2) + 1;
                         gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
                         if (gameOver) {
-                            playersTurn = 1;
                             hexagonBoard.printGameOverMessage();
                         }
                     }
