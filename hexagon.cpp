@@ -1,12 +1,13 @@
 #include "hexagon.h"
 
-hexagon::hexagon(sf::Vector2f pos, int type) : position(pos), type(type) {
+Hexagon::Hexagon(sf::Vector2f pos, int type) : position(pos), type(type) {
 }
 
-void hexagon::draw(sf::RenderWindow& window) {
+void Hexagon::draw(sf::RenderWindow& window) {
+    if (type == -1) { return; }
     sf::ConvexShape hexagon;
     hexagon.setPointCount(6);
-    hexagon.setPoint(0, sf::Vector2f(HEX_WIDTH / 2.f, 0.f));
+    hexagon.setPoint(0, sf::Vector2f(0.f, 0.f));
     hexagon.setPoint(1, sf::Vector2f(HEX_WIDTH / 3.f, -HEX_HEIGHT / 2.f));
     hexagon.setPoint(2, sf::Vector2f(HEX_WIDTH * 2 / 3.f, -HEX_HEIGHT / 2.f));
     hexagon.setPoint(3, sf::Vector2f(HEX_WIDTH, 0));
