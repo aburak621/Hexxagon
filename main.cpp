@@ -4,15 +4,25 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1280, 720)), "Hexagon Window", sf::Style::Default);
-    Board hexagonBoard(window);
+    sf::Font font;
+    // There is a ../ because execution path is cmake-build-debug and the font file is one directory above, in the root
+    if (!font.loadFromFile("../arial.ttf")) {
+        // Error loading font
+        return 1;
+    }
+    sf::Text text(font);
+    text.setCharacterSize(30);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sf::Vector2f(0.f, 0.f));
+    Board hexagonBoard(window, text);
     hexagonBoard.initializeHexagonGrid();
     sf::Vector2f mousePressPos;
     sf::Vector2f mouseReleasePos;
     bool turnPlayed = false; // If the current player played its turn
     int playersTurn = 1; // Which player's turn it is
     bool gameOver = false;
-    bool aiEnabled = true;
-    
+    bool aiEnabled = false;
+
     window.setFramerateLimit(60); // Limit the frame rate to 60fps
 
     // Main loop
@@ -23,15 +33,14 @@ int main() {
             // X button pressed
             if (event.type == sf::Event::Closed)
                 window.close();
-            
+
             // Keyboard inputs
-            if (event.type == sf::Event::KeyPressed)
-            {
-                switch (event.key.code)
-                {
+            if (event.type == sf::Event::KeyPressed) {
+                switch (event.key.code) {
                     case sf::Keyboard::R:
                         hexagonBoard.initializeHexagonGrid();
                         playersTurn = 1;
+                        gameOver = false;
                         break;
                     case sf::Keyboard::Escape:
                         window.close();
@@ -63,9 +72,6 @@ int main() {
                         turnPlayed = false;
                         playersTurn = (playersTurn % 2) + 1;
                         gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
-                        if (gameOver) {
-                            hexagonBoard.printGameOverMessage();
-                        }
                     }
                 }
             }
@@ -74,17 +80,18 @@ int main() {
         // Draw to the window
         window.clear(sf::Color::Black);
         hexagonBoard.drawHexagonGrid();
+        hexagonBoard.printScores();
+        if (gameOver) {
+            hexagonBoard.printGameOverMessage();
+        }
 
         window.display();
-        
+
         if (playersTurn == 2 && aiEnabled) {
             sleep(1);
             hexagonBoard.simulateAI();
             playersTurn = 1;
             gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
-            if (gameOver) {
-                hexagonBoard.printGameOverMessage();
-            }
         }
     }
 

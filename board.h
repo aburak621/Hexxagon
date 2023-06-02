@@ -54,6 +54,7 @@ class Board {
             {1,  1},
     };
     sf::RenderWindow &window;
+    sf::Text& text;
     sf::Vector2f gridPosition = sf::Vector2f((window.getSize().x - HEX_WIDTH * 6.333f) / 2.f,
                                              (window.getSize().y - HEX_HEIGHT * 4.f) / 2.f);
     int playerOneScore = 3;
@@ -63,7 +64,7 @@ class Board {
 public:
     std::vector<std::vector<Hexagon>> cells; // Every hexagon cell in a two-dimensional vector
 
-    Board(sf::RenderWindow &window);
+    Board(sf::RenderWindow &window, sf::Text& text);
 
     void initializeHexagonGrid();
     void drawHexagonGrid();

@@ -2,7 +2,7 @@
 #include <cmath>
 #include <random>
 
-Board::Board(sf::RenderWindow &window) : window(window) {
+Board::Board(sf::RenderWindow &window, sf::Text &text) : window(window), text(text) {
 }
 
 // Initializes the Hexagonal board with the default piece placements.
@@ -76,7 +76,6 @@ bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int
                 playerOneScore -= convertedCount;
                 playerTwoScore += convertedCount;
             }
-            printScores();
             return true;
         }
     }
@@ -127,7 +126,12 @@ int Board::convertAdjacentPieces(sf::Vector2i index, int playerNo) {
 
 // Prints the scores.
 void Board::printScores() {
-    std::cout << "Player 1: " << playerOneScore << " Player 2: " << playerTwoScore << std::endl;
+    text.setString("Player 1: " + std::to_string(playerOneScore));
+    text.setPosition({0, 0});
+    window.draw(text);
+    text.setString("Player 2: " + std::to_string(playerTwoScore));
+    text.setPosition({0, 30});
+    window.draw(text);
 }
 
 // Check if there is any move possible for the given player.
@@ -152,9 +156,23 @@ bool Board::isTherePossibleMove(int playerNo) {
 
 // Prints which player won the game and prompts for restarting the game.
 void Board::printGameOverMessage() {
+    float height = 70.f;
+    sf::RectangleShape rectangle(sf::Vector2f(window.getSize().x, height));
+    rectangle.setPosition({0, window.getSize().y / 2.f - height / 2});
+    rectangle.setFillColor(sf::Color::Black);
+    rectangle.setOutlineColor(sf::Color::Black);
+    rectangle.setOutlineThickness(2.f);
+    window.draw(rectangle);
     bool playerOneWon = playerOneScore > playerTwoScore;
-    std::cout << "Player " << (playerOneWon ? "1" : "2") << " won the game!" << std::endl;
-    std::cout << "Press 'R' to restart the game." << std::endl;
+
+    std::string winningPlayer = playerOneWon ? "1" : "2";
+    text.setString("Player " + winningPlayer + " won the game!");
+    text.setPosition({500, window.getSize().y / 2.f - 35.f});
+    window.draw(text);
+    
+    text.setString("Press 'R' to restart the game.");
+    text.setPosition({470, window.getSize().y / 2.f});
+    window.draw(text);
 }
 
 void Board::simulateAI() {
