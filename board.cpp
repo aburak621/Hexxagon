@@ -16,7 +16,7 @@ void Board::initializeHexagonGrid() {
         int colNumber = 5 + extraCells[row];
         cells.emplace_back();
         for (int col = 0; col < colNumber; ++col) {
-            float colOffset = col * HEX_WIDTH * 2 / 3.f;// + cellOffsets[row] * HEX_WIDTH * 2 / 3.f;
+            float colOffset = col * HEX_WIDTH * 2 / 3.f;
             float x = gridPosition.x + colOffset;
             float rowOffset = -(col + 0) * HEX_HEIGHT / 2.f + row * HEX_HEIGHT;
             float y = gridPosition.y + rowOffset;
@@ -48,6 +48,7 @@ bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int
         if (!(currentIndex.x >= 0 && currentIndex.x < cells.size()) ||
             !(currentIndex.y >= 0 && currentIndex.y < cells[currentIndex.x].size())) { continue; }
         if (placementIndex == currentIndex && cells[currentIndex.x][currentIndex.y].type == HexType::empty) {
+            // Change the type of the placement cell to be the same as the current player
             cells[currentIndex.x][currentIndex.y].type = playerNo;
 
             // Check if it is a two tile move and delete the original piece if so

@@ -74,6 +74,6 @@ public:
     void printScores();
     bool isTherePossibleMove(int playerNo);
     void printGameOverMessage();
-    void simulateAI();
-    int countAdjacentEnemyPieces(sf::Vector2i index, int playerNo);
+    void simulateAI(); // Simulate AI's turn
+    int countAdjacentEnemyPieces(sf::Vector2i index, int playerNo); // Used by AI to maximize converted pieces
 };

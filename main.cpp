@@ -19,7 +19,7 @@ int main() {
     sf::Vector2f mousePressPos;
     sf::Vector2f mouseReleasePos;
     bool turnPlayed = false; // If the current player played its turn
-    int playersTurn = 1; // Which player's turn it is
+    int playerNo = 1; // Which player's turn it is
     bool gameOver = false;
     bool aiEnabled = false;
 
@@ -42,7 +42,7 @@ int main() {
                         break;
                     case sf::Keyboard::R:
                         hexagonBoard.initializeHexagonGrid();
-                        playersTurn = 1;
+                        playerNo = 1;
                         gameOver = false;
                         break;
                     case sf::Keyboard::Escape:
@@ -68,13 +68,13 @@ int main() {
                     sf::Vector2i releaseIndex = hexagonBoard.getIndexUnderCursor(mouseReleasePos);
                     // Checks if player input is valid and places the piece if it is
                     if (pressIndex.x != -1 || releaseIndex.x != -1) {
-                        turnPlayed = hexagonBoard.placePiece(pressIndex, releaseIndex, playersTurn);
+                        turnPlayed = hexagonBoard.placePiece(pressIndex, releaseIndex, playerNo);
                     }
                     // If the player played its turn, the turn switches to other player while checking for game over
                     if (turnPlayed) {
                         turnPlayed = false;
-                        playersTurn = (playersTurn % 2) + 1;
-                        gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
+                        playerNo = (playerNo % 2) + 1;
+                        gameOver = !hexagonBoard.isTherePossibleMove(playerNo);
                     }
                 }
             }
@@ -94,11 +94,11 @@ int main() {
 
         window.display();
 
-        if (playersTurn == 2 && aiEnabled) {
+        if (playerNo == 2 && aiEnabled) {
             sleep(1);
             hexagonBoard.simulateAI();
-            playersTurn = 1;
-            gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
+            playerNo = 1;
+            gameOver = !hexagonBoard.isTherePossibleMove(playerNo);
         }
     }
 
