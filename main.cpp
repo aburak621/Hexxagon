@@ -7,7 +7,7 @@
 void ClickCell(sf::Vector2f clickPos);
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hexagon Window", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "hexagon Window", sf::Style::Close);
     Board hexagonBoard(window);
     hexagonBoard.initializeHexagonGrid();
 

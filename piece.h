@@ -1,6 +1,3 @@
-#ifndef PROJECT_PIECE_H
-#define PROJECT_PIECE_H
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -18,5 +15,3 @@ public:
     sf::Vector2<int> m_position;
     bool m_player;
 };
-
-#endif //PROJECT_PIECE_H

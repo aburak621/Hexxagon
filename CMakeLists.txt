@@ -10,6 +10,6 @@ FETCHCONTENT_DECLARE(
         GIT_REPOSITORY https://github.com/SFML/SFML.git
 )
 FETCHCONTENT_MAKEAVAILABLE(SFML)
-add_executable(project main.cpp board.cpp board.h piece.h player.cpp player.h)
+add_executable(project main.cpp board.cpp board.h piece.h player.cpp player.h hexagon.cpp hexagon.h)
 target_link_libraries(project PRIVATE sfml-system sfml-window
         sfml-graphics)

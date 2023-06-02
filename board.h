@@ -1,40 +1,36 @@
+#include "common.h"
+#include "hexagon.h"
 
-
-#ifndef BOARD_H
-#define BOARD_H
-
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include "piece.h"
-
-enum HexType { empty, player, enemy };
-
-class Hexagon {
-public:
-    Hexagon(sf::Vector2f position, HexType type= HexType::empty) {
-        m_position = position;
-        cellType = type;
-    }
-    sf::Vector2f m_position;
-    HexType cellType;
-    Piece* currentPiece = nullptr;
+enum HexType { none = -1, empty, playerOne, playerTwo };
+std::vector<sf::Vector2i> legalMoves = {
+        sf::Vector2i(-2, 0),
+        sf::Vector2i(-2, 1),
+        sf::Vector2i(-2, 2),
+        sf::Vector2i(-1, -1),
+        sf::Vector2i(-1, 0),
+        sf::Vector2i(-1, 1),
+        sf::Vector2i(-1, 2),
+        sf::Vector2i(0, -2),
+        sf::Vector2i(0, -1),
+        sf::Vector2i(0, 1),
+        sf::Vector2i(0, 2),
+        sf::Vector2i(1, -2),
+        sf::Vector2i(1, -1),
+        sf::Vector2i(1, 0),
+        sf::Vector2i(1, 1),
+        sf::Vector2i(2, 0),
+        sf::Vector2i(2, -1),
+        sf::Vector2i(2, -2),
 };
 
 class Board {
-private:
     sf::RenderWindow& window;
-    sf::Vector2f gridPosition;
-
-    void drawHexagon(float x, float y, sf::Color fillColor, sf::Color outlineColor);
+    sf::Vector2f gridPosition = sf::Vector2f(420.f, 420.f);
 
 public:
-    float HEX_SIZE;
-    float HEX_HEIGHT;
-    float HEX_WIDTH;
-    std::vector<std::vector<Hexagon>> cells;
+    std::vector<std::vector<hexagon>> cells;
+    
     Board(sf::RenderWindow& window); // Constructor
     void initializeHexagonGrid();
+    bool placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int playerNo, bool adjacentMove);
 };
-
-
-#endif
