@@ -3,6 +3,7 @@
 Hexagon::Hexagon(sf::Vector2f pos, int type) : position(pos), type(type) {
 }
 
+// Draws the Hexagon to the window.
 void Hexagon::draw(sf::RenderWindow& window) {
     if (type == -1) { return; }
     sf::ConvexShape hexagon;

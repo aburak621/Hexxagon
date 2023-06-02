@@ -4,6 +4,7 @@
 Board::Board(sf::RenderWindow &window) : window(window) {
 }
 
+// Initializes the Hexagonal board with the default piece placements.
 void Board::initializeHexagonGrid() {
     playerOneScore = 3;
     playerTwoScore = 3;
@@ -32,6 +33,8 @@ void Board::initializeHexagonGrid() {
     }
 }
 
+// Check if the piece in the first index is able to be placed in the placement index.
+// Returns true is placement has taken place, false otherwise.
 bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int playerNo) {
     if (!(pieceIndex.x >= 0 && pieceIndex.x < cells.size()) &&
         !(pieceIndex.y >= 0 && pieceIndex.y < cells[pieceIndex.x].size())) { return false; }
@@ -78,6 +81,7 @@ bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int
     return false;
 }
 
+// Draws every Hexagon.
 void Board::drawHexagonGrid() {
     for (std::vector<Hexagon> &cols: cells) {
         for (Hexagon &cell: cols) {
@@ -86,6 +90,7 @@ void Board::drawHexagonGrid() {
     }
 }
 
+// Gets the index of the Hexagon under the cursor in the cells vectors.
 sf::Vector2i Board::getIndexUnderCursor(sf::Vector2f mousePos) {
     for (int row = 0; row < cells.size(); row++) {
         for (int col = 0; col < cells[row].size(); col++) {
@@ -100,6 +105,7 @@ sf::Vector2i Board::getIndexUnderCursor(sf::Vector2f mousePos) {
     return {-1, -1};
 }
 
+// Converts the pieces around given index to the pieces of the given player.
 int Board::convertAdjacentPieces(sf::Vector2i index, int playerNo) {
     int convertedCount = 0;
     for (auto &tile: adjacentTiles) {
@@ -117,10 +123,12 @@ int Board::convertAdjacentPieces(sf::Vector2i index, int playerNo) {
     return convertedCount;
 }
 
+// Prints the scores.
 void Board::printScores() {
     std::cout << "Player 1: " << playerOneScore << " Player 2: " << playerTwoScore << std::endl;
 }
 
+// Check if there is any move possible for the given player.
 bool Board::isTherePossibleMove(int playerNo) {
     for (int row = 0; row < cells.size(); row++) {
         for (int col = 0; col < cells[row].size(); col++) {
@@ -140,6 +148,7 @@ bool Board::isTherePossibleMove(int playerNo) {
     return false;
 }
 
+// Prints which player won the game and prompts for restarting the game.
 void Board::printGameOverMessage() {
     bool playerOneWon = playerOneScore > playerTwoScore;
     std::cout << "Player " << (playerOneWon ? "1" : "2") << " won the game!" << std::endl;

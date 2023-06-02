@@ -8,7 +8,7 @@
 
 class Hexagon {
 public:
-    sf::Vector2f position;
+    sf::Vector2f position; // Pixel position in window
     int type; // -1 = non-existent, 0 = empty, 1 = player1, 2 = player2
     
     Hexagon(sf::Vector2f pos, int type);

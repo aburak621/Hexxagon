@@ -8,6 +8,7 @@ enum HexType {
 };
 
 class Board {
+    // Every move a piece can make
     std::vector<sf::Vector2i> legalMoves = {
             {-2, -2},
             {-2, -1},
@@ -28,6 +29,7 @@ class Board {
             {2,  1},
             {2,  2}
     };
+    // Two tile moves a piece can make
     std::vector<sf::Vector2i> twoTileMoves = {
             {-2, -2},
             {-2, -1},
@@ -42,6 +44,7 @@ class Board {
             {2,  1},
             {2,  2}
     };
+    // Relative coordinates of the adjacent tiles
     std::vector<sf::Vector2i> adjacentTiles = {
             {-1, -1},
             {-1, 0},
@@ -58,9 +61,9 @@ class Board {
 
     
 public:
-    std::vector<std::vector<Hexagon>> cells;
+    std::vector<std::vector<Hexagon>> cells; // Every hexagon cell in a two-dimensional vector
 
-    Board(sf::RenderWindow &window); // Constructor
+    Board(sf::RenderWindow &window);
 
     void initializeHexagonGrid();
     void drawHexagonGrid();
