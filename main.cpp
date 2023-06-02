@@ -9,6 +9,8 @@ int main() {
     sf::Vector2f mouseReleasePos;
     bool turnPlayed = false;
     int playersTurn = 1;
+    
+    window.setFramerateLimit(60);
 
     while (window.isOpen()) {
         sf::Event event;

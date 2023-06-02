@@ -5,6 +5,8 @@ Board::Board(sf::RenderWindow &window) : window(window) {
 }
 
 void Board::initializeHexagonGrid() {
+    playerOneScore = 3;
+    playerTwoScore = 3;
     std::vector<int> extraCells = {0, 1, 2, 3, 4, 4, 4, 4, 4};
     for (int row = 0; row < 9; ++row) {
         int colNumber = 5 + extraCells[row];
@@ -44,11 +46,28 @@ bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int
                 if (placementIndex.x == pieceIndex.x + twoTileMove.x &&
                     placementIndex.y == pieceIndex.y + twoTileMove.y) {
                     cells[pieceIndex.x][pieceIndex.y].type = HexType::empty;
+                    if (playerNo == 1) {
+                        playerOneScore--;
+                    } else if (playerNo == 2) {
+                        playerTwoScore--;
+                    }
                     break;
                 }
             }
-            // convert adjacent pieces function here
-            convertAdjacentPieces(placementIndex, playerNo);
+            
+            // Convert adjacent pieces
+            int convertedCount = convertAdjacentPieces(placementIndex, playerNo);
+            // Update scores
+            if (playerNo == 1) {
+                playerOneScore++;
+                playerOneScore += convertedCount;
+                playerTwoScore -= convertedCount;
+            } else if (playerNo == 2) {
+                playerTwoScore++;
+                playerOneScore -= convertedCount;
+                playerTwoScore += convertedCount;
+            }
+            printScores();
             return true;
         }
     }
@@ -78,16 +97,22 @@ sf::Vector2i Board::getIndexUnderCursor(sf::Vector2f mousePos) {
 }
 
 int Board::convertAdjacentPieces(sf::Vector2i index, int playerNo) {
+    int convertedCount = 0;
     for (auto &tile: adjacentTiles) {
         int currentRow = index.x + tile.x;
         int currentCol = index.y + tile.y;
-        if (!(currentRow >= 0 && currentRow < cells.size()) &&
+        if (!(currentRow >= 0 && currentRow < cells.size()) ||
             !(currentCol >= 0 && currentCol < cells[currentRow].size())) { continue; }
         Hexagon &currentTile = cells[currentRow][currentCol];
         if (currentTile.type == -1) { continue; }
         if (currentTile.type == (playerNo % 2) + 1) {
             currentTile.type = playerNo;
+            convertedCount++;
         }
     }
-    return 0;
+    return convertedCount;
+}
+
+void Board::printScores() {
+    std::cout << "Player 1: " << playerOneScore << " Player 2: " << playerTwoScore << std::endl;
 }

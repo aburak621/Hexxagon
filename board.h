@@ -53,6 +53,8 @@ class Board {
     sf::RenderWindow &window;
     sf::Vector2f gridPosition = sf::Vector2f((window.getSize().x - HEX_WIDTH * 6.333f) / 2.f,
                                              (window.getSize().y - HEX_HEIGHT * 4.f) / 2.f);
+    int playerOneScore = 3;
+    int playerTwoScore = 3;
 
     
 public:
@@ -65,4 +67,5 @@ public:
     bool placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int playerNo);
     sf::Vector2i getIndexUnderCursor(sf::Vector2f mousePos);
     int convertAdjacentPieces(sf::Vector2i index, int playerNo);
+    void printScores();
 };
