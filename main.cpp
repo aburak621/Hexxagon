@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "common.h"
 #include "board.h"
 
@@ -10,6 +11,7 @@ int main() {
     bool turnPlayed = false; // If the current player played its turn
     int playersTurn = 1; // Which player's turn it is
     bool gameOver = false;
+    bool aiEnabled = true;
     
     window.setFramerateLimit(60); // Limit the frame rate to 60fps
 
@@ -74,6 +76,16 @@ int main() {
         hexagonBoard.drawHexagonGrid();
 
         window.display();
+        
+        if (playersTurn == 2 && aiEnabled) {
+            sleep(1);
+            hexagonBoard.simulateAI();
+            playersTurn = 1;
+            gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
+            if (gameOver) {
+                hexagonBoard.printGameOverMessage();
+            }
+        }
     }
 
     return 0;

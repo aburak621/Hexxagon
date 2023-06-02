@@ -1,11 +1,13 @@
 #include "board.h"
 #include <cmath>
+#include <random>
 
 Board::Board(sf::RenderWindow &window) : window(window) {
 }
 
 // Initializes the Hexagonal board with the default piece placements.
 void Board::initializeHexagonGrid() {
+    std::srand(std::time(nullptr));
     playerOneScore = 3;
     playerTwoScore = 3;
     cells.clear();
@@ -132,9 +134,9 @@ void Board::printScores() {
 bool Board::isTherePossibleMove(int playerNo) {
     for (int row = 0; row < cells.size(); row++) {
         for (int col = 0; col < cells[row].size(); col++) {
-            Hexagon& cell = cells[row][col];
+            Hexagon &cell = cells[row][col];
             if (cell.type != playerNo) { continue; }
-            for (auto& tile: legalMoves) {
+            for (auto &tile: legalMoves) {
                 int currentRow = row + tile.x;
                 int currentCol = col + tile.y;
                 if (!(currentRow >= 0 && currentRow < cells.size()) ||
@@ -153,4 +155,56 @@ void Board::printGameOverMessage() {
     bool playerOneWon = playerOneScore > playerTwoScore;
     std::cout << "Player " << (playerOneWon ? "1" : "2") << " won the game!" << std::endl;
     std::cout << "Press 'R' to restart the game." << std::endl;
+}
+
+void Board::simulateAI() {
+    sf::Vector2i optimumPieceIndex(-1, -1);
+    sf::Vector2i optimumMove(0, 0);
+    int maxConversionCount = 0;
+    bool foundAMove = false;
+    for (int row = 0; row < cells.size(); row++) {
+        for (int col = 0; col < cells[row].size(); col++) {
+            Hexagon &cell = cells[row][col];
+            if (cell.type != 2) { continue; }
+            for (auto &tile: legalMoves) {
+                int currentRow = row + tile.x;
+                int currentCol = col + tile.y;
+                if (!(currentRow >= 0 && currentRow < cells.size()) ||
+                    !(currentCol >= 0 && currentCol < cells[currentRow].size())) { continue; }
+                if (cells[currentRow][currentCol].type == HexType::empty) {
+                    int conversionCount = countAdjacentEnemyPieces(sf::Vector2i(currentRow, currentCol), 2);
+                    if (conversionCount > maxConversionCount) {
+                        maxConversionCount = conversionCount;
+                        optimumPieceIndex = sf::Vector2i(row, col);
+                        optimumMove = tile;
+                        foundAMove = true;
+                    }
+                    bool shouldChangeMove = (std::rand() % 100) <= 20;
+                    if (maxConversionCount == 0 && shouldChangeMove || !foundAMove) {
+                        optimumPieceIndex = sf::Vector2i(row, col);
+                        optimumMove = tile;
+                        foundAMove = true;
+                    }
+                }
+            }
+        }
+    }
+    placePiece(optimumPieceIndex, optimumPieceIndex + optimumMove, 2);
+}
+
+int Board::countAdjacentEnemyPieces(sf::Vector2i index, int playerNo) {
+    int convertedCount = 0;
+    for (auto tile: adjacentTiles) {
+        int currentRow = index.x + tile.x;
+        int currentCol = index.y + tile.y;
+        if (!(currentRow >= 0 && currentRow < cells.size()) ||
+            !(currentCol >= 0 && currentCol < cells[currentRow].size())) { continue; }
+        Hexagon currentTile = cells[currentRow][currentCol];
+        if (currentTile.type == -1) { continue; }
+        if (currentTile.type == (playerNo % 2) + 1) {
+            currentTile.type = playerNo;
+            convertedCount++;
+        }
+    }
+    return convertedCount;
 }

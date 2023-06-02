@@ -73,4 +73,6 @@ public:
     void printScores();
     bool isTherePossibleMove(int playerNo);
     void printGameOverMessage();
+    void simulateAI();
+    int countAdjacentEnemyPieces(sf::Vector2i index, int playerNo);
 };
