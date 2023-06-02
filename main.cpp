@@ -37,6 +37,9 @@ int main() {
             // Keyboard inputs
             if (event.type == sf::Event::KeyPressed) {
                 switch (event.key.code) {
+                    case sf::Keyboard::A:
+                        aiEnabled = !aiEnabled;
+                        break;
                     case sf::Keyboard::R:
                         hexagonBoard.initializeHexagonGrid();
                         playersTurn = 1;
@@ -84,6 +87,10 @@ int main() {
         if (gameOver) {
             hexagonBoard.printGameOverMessage();
         }
+        std::string aiMode = aiEnabled ? "ON" : "OFF";
+        text.setString("AI Mode: " + aiMode);
+        text.setPosition({0, 60});
+        window.draw(text);
 
         window.display();
 
