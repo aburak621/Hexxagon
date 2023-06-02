@@ -68,4 +68,6 @@ public:
     sf::Vector2i getIndexUnderCursor(sf::Vector2f mousePos);
     int convertAdjacentPieces(sf::Vector2i index, int playerNo);
     void printScores();
+    bool isTherePossibleMove(int playerNo);
+    void printGameOverMessage();
 };

@@ -54,7 +54,7 @@ bool Board::placePiece(sf::Vector2i pieceIndex, sf::Vector2i placementIndex, int
                     break;
                 }
             }
-            
+
             // Convert adjacent pieces
             int convertedCount = convertAdjacentPieces(placementIndex, playerNo);
             // Update scores
@@ -115,4 +115,28 @@ int Board::convertAdjacentPieces(sf::Vector2i index, int playerNo) {
 
 void Board::printScores() {
     std::cout << "Player 1: " << playerOneScore << " Player 2: " << playerTwoScore << std::endl;
+}
+
+bool Board::isTherePossibleMove(int playerNo) {
+    for (int row = 0; row < cells.size(); row++) {
+        for (int col = 0; col < cells[row].size(); col++) {
+            Hexagon& cell = cells[row][col];
+            if (cell.type != playerNo) { continue; }
+            for (auto& tile: legalMoves) {
+                int currentRow = row + tile.x;
+                int currentCol = col + tile.y;
+                if (!(currentRow >= 0 && currentRow < cells.size()) ||
+                    !(currentCol >= 0 && currentCol < cells[currentRow].size())) { continue; }
+                if (cells[currentRow][currentCol].type == HexType::empty) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void Board::printGameOverMessage() {
+    bool playerOneWon = playerOneScore > playerTwoScore;
+    std::cout << "Player " << (playerOneWon ? "1" : "2") << " won the game!" << std::endl;
 }

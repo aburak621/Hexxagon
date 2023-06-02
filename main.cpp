@@ -9,6 +9,7 @@ int main() {
     sf::Vector2f mouseReleasePos;
     bool turnPlayed = false;
     int playersTurn = 1;
+    bool gameOver = false;
     
     window.setFramerateLimit(60);
 
@@ -36,6 +37,11 @@ int main() {
                     if (turnPlayed) {
                         turnPlayed = false;
                         playersTurn = (playersTurn % 2) + 1;
+                        gameOver = !hexagonBoard.isTherePossibleMove(playersTurn);
+                        if (gameOver) {
+                            playersTurn = 1;
+                            hexagonBoard.printGameOverMessage();
+                        }
                     }
                 }
             }
