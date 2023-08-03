@@ -1,6 +1,6 @@
 # Hexxagon
 
-This is my implementation of the Hexxagon game using C++ and SFML.
+This is my implementation of the Hexxagon game made in two days using C++ and SFML.
 
 ## Screenshots
 
